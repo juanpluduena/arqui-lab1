@@ -64,8 +64,8 @@ module datapath #(parameter N = 64)
 										.PCBranch_E(PCBranch_E), 
 										.aluResult_E(aluResult_E), 
 										.writeData_E(writeData_E), 
-										.zero_E(zero_E));											
-											
+										.zero_E(zero_E));
+									
 									
 	flopr 	#(203)	EX_MEM 	(.clk(clk),
 										.reset(reset), 
