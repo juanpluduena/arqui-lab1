@@ -12,8 +12,13 @@ module regfile(
 	};
 	
 	always_comb begin
-		rd1 = (ra1 == 5'd31) ? 64'b0 : REGS[ra1];
-		rd2 = (ra2 == 5'd31) ? 64'b0 : REGS[ra2];
+		// Si se intenta leer un registro que está siendo escrito, se reenvía el dato nuevo
+		rd1 = (ra1 == wa3 && we3 && wa3 != 5'd31) ? wd3 : REGS[ra1];
+		rd2 = (ra2 == wa3 && we3 && wa3 != 5'd31) ? wd3 : REGS[ra2];
+
+		// XZR (X31) siempre es 0
+		if (ra1 == 5'd31) rd1 = 64'b0;
+		if (ra2 == 5'd31) rd2 = 64'b0;
 	end
 	
 	always_ff @(posedge clk) begin

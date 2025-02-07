@@ -6,6 +6,6 @@ module sl2 #(parameter N = 64)
 
 	assign y[0] = 1'b0;
 	assign y[1] = 1'b0;
-	assign y[N-1:2] = a[N-3:0];
+	assign y[63:2] = a[61:0];
 	
 endmodule
