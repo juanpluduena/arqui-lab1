@@ -59,6 +59,18 @@ module maindec(
 				ALUOp = 2'b10;
 			end
 			
+			11'b100_1000_1000, 11'b100_1000_1001, // ADDI
+			11'b110_1000_1000, 11'b110_1000_1001: begin // SUBI
+				Reg2Loc = 0;
+				ALUSrc = 1;
+				MemtoReg = 0;
+				RegWrite = 1;
+				MemRead = 0;
+				MemWrite = 0;
+				Branch = 0;
+				ALUOp = 2'b10;
+			end
+			
 			default: begin // default
 				Reg2Loc = 0;
 				ALUSrc = 0;
