@@ -1,11 +1,12 @@
 module maindec(
 	input logic [10:0] Op,
-	output logic Reg2Loc, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch,
+	output logic Reg2Loc, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, condBranch,
 	output logic [1:0] ALUOp
 );
 	always_comb begin
 		case (Op)
-			11'b111_1100_0010: begin // LDUR
+			// LDUR
+			11'b111_1100_0010: begin
 				Reg2Loc = 0;
 				ALUSrc = 1;
 				MemtoReg = 1;
@@ -13,10 +14,12 @@ module maindec(
 				MemRead = 1;
 				MemWrite = 0;
 				Branch = 0;
+				condBranch = 0;
 				ALUOp = 2'b00;
 			end
 			
-			11'b111_1100_0000: begin // STUR
+			// STUR
+			11'b111_1100_0000: begin
 				Reg2Loc = 1;
 				ALUSrc = 1;
 				MemtoReg = 0;
@@ -24,9 +27,11 @@ module maindec(
 				MemRead = 0;
 				MemWrite = 1;
 				Branch = 0;
+				condBranch = 0;
 				ALUOp = 2'b00;
 			end
 			
+			// CBZ
 			11'b101_1010_0000,
 			11'b101_1010_0001,
 			11'b101_1010_0010,
@@ -34,7 +39,7 @@ module maindec(
 			11'b101_1010_0100,
 			11'b101_1010_0101,
 			11'b101_1010_0110,
-			11'b101_1010_0111: begin // CBZ
+			11'b101_1010_0111: begin
 				Reg2Loc = 1;
 				ALUSrc = 0;
 				MemtoReg = 0;
@@ -42,13 +47,17 @@ module maindec(
 				MemRead = 0;
 				MemWrite = 0;
 				Branch = 1;
+				condBranch = 0;
 				ALUOp = 2'b01;
 			end
 			
-			11'b100_0101_1000,
-			11'b110_0101_1000,
-			11'b100_0101_0000,
-			11'b101_0101_0000: begin // ADD, SUB, AND, ORR
+			// R format
+			11'b101_0101_1000, // ADDS
+			11'b111_0101_1000, // SUBS
+			11'b100_0101_1000, // ADD
+			11'b110_0101_1000, // SUB
+			11'b100_0101_0000, // AND
+			11'b101_0101_0000: begin // ORR
 				Reg2Loc = 0;
 				ALUSrc = 0;
 				MemtoReg = 0;
@@ -56,9 +65,13 @@ module maindec(
 				MemRead = 0;
 				MemWrite = 0;
 				Branch = 0;
+				condBranch = 0;
 				ALUOp = 2'b10;
 			end
 			
+			// I format
+			11'b101_1000_1000, 11'b101_1000_1001, // ADDIS
+			11'b111_1000_1000, 11'b111_1000_1001, // SUBIS
 			11'b100_1000_1000, 11'b100_1000_1001, // ADDI
 			11'b110_1000_1000, 11'b110_1000_1001: begin // SUBI
 				Reg2Loc = 0;
@@ -68,10 +81,28 @@ module maindec(
 				MemRead = 0;
 				MemWrite = 0;
 				Branch = 0;
+				condBranch = 0;
 				ALUOp = 2'b10;
 			end
 			
-			default: begin // default
+			// B.cond
+			11'b01_0101_0000,
+			11'b01_0101_0001,
+			11'b01_0101_0010,
+			11'b01_0101_0011: begin
+				Reg2Loc = 1;
+				ALUSrc = 0;
+				MemtoReg = 0;
+				RegWrite = 0;
+				MemRead = 0;
+				MemWrite = 0;
+				Branch = 0;
+				condBranch = 1;
+				ALUOp = 2'b01;
+			end
+			
+			// opcode desconocido
+			default: begin
 				Reg2Loc = 0;
 				ALUSrc = 0;
 				MemtoReg = 0;
@@ -79,6 +110,7 @@ module maindec(
 				MemRead = 0;
 				MemWrite = 0;
 				Branch = 0;
+				condBranch = 0;
 				ALUOp = 2'b00;
 			end
 		endcase
