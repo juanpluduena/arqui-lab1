@@ -14,9 +14,9 @@ module datapath #(parameter N = 64)
 					input logic [31:0] IM_readData,
 					input logic [N-1:0] DM_readData,
 					output logic [N-1:0] IM_addr, DM_addr, DM_writeData,
-					output logic DM_writeEnable, DM_readEnable );					
+					output logic DM_writeEnable, DM_readEnable,
+					output logic PCSrc);					
 					
-	logic PCSrc;
 	logic [N-1:0] PCBranch_E, aluResult_E, writeData_E, writeData3; 
 	logic [N-1:0] signImm_D, readData1_D, readData2_D;
 	logic zero_E, cBranch;

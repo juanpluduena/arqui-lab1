@@ -4,12 +4,13 @@
 module processor_tb();
 	localparam  N = 64;
 	logic        	CLOCK_50, reset;
-	logic        	DM_writeEnable;
-	logic [N-1:0] 	DM_writeData, DM_addr;
+	logic        	DM_writeEnable, PCSrc, condBranch;
+	logic [N-1:0] 	DM_writeData, DM_addr, IM_address;
 	logic 			dump;
+	logic [10:0] instr;
   
   // instantiate device under test
-  processor_arm  dut (CLOCK_50, reset, DM_writeData, DM_addr, DM_writeEnable, dump);
+  processor_arm  dut (CLOCK_50, reset, DM_writeData, DM_addr, IM_address, DM_writeEnable, PCSrc, condBranch, instr, dump);
     
   // generate clock
   always     // no sensitivity list, so it always executes
@@ -22,7 +23,7 @@ module processor_tb();
     begin
       CLOCK_50 = 0; reset = 1; dump = 0;
       #20 reset = 0; 
-      #400 dump = 1; 
+      #600 dump = 1; 
 	   #20 $stop;
 	end 
 endmodule
