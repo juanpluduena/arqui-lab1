@@ -5,9 +5,9 @@ module flopenr #(parameter WIDTH = 1) (
 );
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
-            q <= '0; // Resetea a 0
+            q <= '0; // resetea a 0
         end else if (en) begin
-            q <= d;  // Actualiza solo si `en` está activa
+            q <= d;  // actualiza solo si "en" esta activa
         end
     end
 endmodule

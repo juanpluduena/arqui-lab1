@@ -79,7 +79,7 @@ module datapath #(parameter N = 64)
 		 .reset(reset), 
 		 .en(write_flags), 
 		 .d({z, n, v, c}), 
-		 .q(CPSR_flags) // Salida que representa las banderas actuales
+		 .q(CPSR_flags) // salida que representa las banderas actuales
 	);
 	
 	bCondCheck BCOND (
