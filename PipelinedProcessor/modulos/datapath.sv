@@ -9,7 +9,8 @@ module datapath #(parameter N = 64)
 					input logic memRead,
 					input logic memWrite,
 					input logic regWrite,	
-					input logic memtoReg,									
+					input logic memtoReg,	
+					input logic condBranch,
 					input logic [31:0] IM_readData,
 					input logic [N-1:0] DM_readData,
 					output logic [N-1:0] IM_addr, DM_addr, DM_writeData,
@@ -18,11 +19,13 @@ module datapath #(parameter N = 64)
 	logic PCSrc;
 	logic [N-1:0] PCBranch_E, aluResult_E, writeData_E, writeData3; 
 	logic [N-1:0] signImm_D, readData1_D, readData2_D;
-	logic zero_E;
+	logic zero_E, cBranch;
+	logic z, n, v, c, write_flags;
 	logic [95:0] qIF_ID;
 	logic [270:0] qID_EX;
-	logic [202:0] qEX_MEM;
+	logic [203:0] qEX_MEM;
 	logic [134:0] qMEM_WB;
+	logic [3:0] CPSR_flags;
 	
 	fetch 	#(64) 	FETCH 	(.PCSrc_F(PCSrc),
 										.clk(clk),
@@ -64,7 +67,31 @@ module datapath #(parameter N = 64)
 										.PCBranch_E(PCBranch_E), 
 										.aluResult_E(aluResult_E), 
 										.writeData_E(writeData_E), 
-										.zero_E(zero_E));
+										.zero_E(zero_E),
+										.z(z),
+										.n(n),
+										.v(v),
+										.c(c),
+										.write_flags(write_flags));
+										
+	flopenr #(4) CPSR_FLAGS (
+		 .clk(clk), 
+		 .reset(reset), 
+		 .en(write_flags), 
+		 .d({z, n, v, c}), 
+		 .q(CPSR_flags) // Salida que representa las banderas actuales
+	);
+	
+	bCondCheck BCOND (
+        .z(CPSR_flags[3]), 
+        .n(CPSR_flags[2]), 
+        .v(CPSR_flags[1]), 
+        .c(CPSR_flags[0]), 
+        .condBranch(condBranch), 
+        .qIF_ID(qIF_ID[4:0]), 
+        .cBranch(cBranch)
+    );
+
 									
 									
 	flopr 	#(203)	EX_MEM 	(.clk(clk),
@@ -74,7 +101,9 @@ module datapath #(parameter N = 64)
 	
 										
 	memory				MEMORY	(.Branch_M(qEX_MEM[202]), 
-										.zero_M(qEX_MEM[133]), 
+										.zero_M(qEX_MEM[133]),
+										.condBranch(condBranch),
+										.cBranch(cBranch),
 										.PCSrc_M(PCSrc));
 			
 	
