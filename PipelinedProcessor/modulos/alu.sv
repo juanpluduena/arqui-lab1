@@ -20,7 +20,7 @@ module alu (
 		endcase
 		
 		write_flags = ALUControl[3];
-		zero = &(~result);
+		zero = (result == 0);
 		Z = zero;
 		N = result[63];
 		V = (~(ALUControl[2] ^ a[63] ^ b[63]) && (result[63] ^ a[63]) && ALUControl[1]);
