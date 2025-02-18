@@ -5,6 +5,7 @@ module processor_arm #(parameter N = 64)
 							output logic [N-1:0] DM_writeData, DM_addr, IM_address,
 							output logic DM_writeEnable, PCSrc, condBranch,
 							output logic [10:0] instr,
+							output logic [N-1:0] PCBranch_E,
 							input	logic dump);
 							
 	logic [31:0] q;		
@@ -43,10 +44,11 @@ module processor_arm #(parameter N = 64)
 									.DM_writeData(DM_writeData), 
 									.DM_writeEnable(DM_writeEnable), 
 									.DM_readEnable(DM_readEnable),
-									.PCSrc(PCSrc));				
+									.PCSrc(PCSrc),
+									.PCBranch_E(PCBranch_E));				
 					
 					
-	imem 				instrMem (.addr(IM_address[8:2]),
+	imem 				instrMem (.addr(IM_address[9:2]),
 									.q(q));
 									
 	

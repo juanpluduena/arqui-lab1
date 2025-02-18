@@ -11,19 +11,13 @@ module regfile(
 		64'd30, 64'd0
 	};
 	
-	always_comb begin
-		// si se intenta leer un registro que esta siendo escrito, se reenvia el dato nuevo
-		rd1 = (ra1 == wa3 && we3 && wa3 != 5'd31) ? wd3 : REGS[ra1];
-		rd2 = (ra2 == wa3 && we3 && wa3 != 5'd31) ? wd3 : REGS[ra2];
-
-		if (ra1 == 5'd31) rd1 = 64'b0;
-		if (ra2 == 5'd31) rd2 = 64'b0;
-	end
-	
 	always_ff @(posedge clk) begin
 		if (we3 && (wa3 != 5'd31)) begin
 			REGS[wa3] <= wd3;
 		end
 	end
+
+	assign rd1 = (we3 && (wa3 == ra1)) ? wd3 : REGS[ra1];
+    assign rd2 = (we3 && (wa3 == ra2)) ? wd3 : REGS[ra2];
 	
 endmodule

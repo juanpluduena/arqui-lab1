@@ -3,7 +3,7 @@ module fetch #(parameter N = 64) (
 	input logic [N-1:0] PCBranch_F,
 	output logic [N-1:0] imem_addr_F
 );
-	logic [N-1:0] mux_result, adder_result, flop_result;
+	logic [N-1:0] mux_result, adder_result;
 	
 	mux2 mux_inst (
 		.d0(adder_result),
@@ -16,14 +16,13 @@ module fetch #(parameter N = 64) (
 	  .clk(clk),
 	  .reset(reset),
 	  .d(mux_result),
-	  .q(flop_result)
+	  .q(imem_addr_F)
     );
 	 
 	 adder adder_inst (
-		.a(flop_result),
-		.b({{(N-3){1'b0}}, 3'b100}),
+		.a(imem_addr_F),
+		.b(64'h4),
 		.y(adder_result)
 	 );
-	 
-	 assign imem_addr_F = flop_result;
+
 endmodule
