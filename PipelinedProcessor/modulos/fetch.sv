@@ -21,7 +21,7 @@ module fetch #(parameter N = 64) (
 	 
 	 adder adder_inst (
 		.a(flop_result),
-		.b({{(N-3){1'b0}}, 3'b100}),
+		.b(64'h4),
 		.y(adder_result)
 	 );
 	 
