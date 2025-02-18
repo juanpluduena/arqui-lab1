@@ -1,4 +1,4 @@
- // B.EQ Test (equal)
+// B.EQ Test (equal)
 ADDS X1, X1, XZR      // Set condition flags: X1 = 1
 ADD XZR, XZR, XZR     // Resolve dependency
 ADD XZR, XZR, XZR     // Resolve dependency

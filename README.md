@@ -121,19 +121,19 @@ finloop: CBZ XZR, finloop
 ## Ejercicio 2
 
 Las modificaciones que se realizaron fueron en los modulos:
-- `alu.sv`: Se agregaron las flags `Z`, `N`, `V`, `C` y la señal `write_flags`. Además se actualizaron las operaciones de suma y resta para manejar instrucciones con banderas.
+- `alu.sv`: Se agregaron las flags `Ne` (Negative), `V` (oVerflow), `C` (Carry) y la señal `write_flags`. Además se actualizaron las operaciones de suma y resta para manejar instrucciones con banderas.
 - `aludec.sv`: Se agregaron códigos de control para instrucciones con banderas (ADDS, SUBS, ADDIS, SUBIS), permitiendo su correcta decodificación.
 - `controller.sv`: Se agregó la señal `condBranch` para identificar instrucciones de salto condicional y habilitar su procesamiento en el datapath.
-- `datapath.sv`: Se integró el nuevo módulo `bCondCheck` para evaluar condiciones de salto basadas en las banderas de estado. Además, se incluyó el registro `CPSR_flags` mediante `flopenr.sv` para almacenar las banderas de estado del procesador.
+- `datapath.sv`: Se modificó la señal `qEX_MEM`, que ahora acepta más bits debido a que se incluyeron las señales de bandera `zero`, `Ne`, `V`, `C` y `write_flags`.
 - `execute.sv`: Se expandió la ALU para que genere las banderas de estado y la señal `write_flags`, asegurando su propagación correcta dentro del datapath.
 - `maindec.sv`: Se agregaron los opcode de las nuevas instrucciones. Además, se añadió la señal `condBranch` a la decodificación de instrucciones, permitiendo diferenciar los saltos condicionales.
-- `memory.sv`: Se modificó la asignación de `PCSrc_M` para incluir la nueva señal `condBranch`, permitiendo la ejecución de saltos condicionales basados en las banderas de estado.
+- `memory.sv`: Se integró el nuevo módulo `bCondCheck` para evaluar condiciones de salto basadas en las banderas de estado. Se usó además el nuevo módulo `flag_register` cuyo resultado va a ser usado por `bCondCheck` para seleccionar el caso de salto. Por último, se agregó un `mux2` para elegir entre salto condicional y salto incondicional basado en el estado de la señal `condBranch`. El resultado de este multiplexor va a salir del modulo memory a través de la señal `PCSrc_M`.
 - `processor_arm.sv`: Se añadieron señales de control adicionales: `PCSrc`, `condBranch`, `instr`, `IM_addr`.
-- `signext.sv`: Se actualizaron las instrucciones soportadas en la extensión de signo para incluir las instrucciones ADDIS y SUBIS.
+- `signext.sv`: Se actualizaron las instrucciones soportadas en la extensión de signo para incluir las instrucciones `ADDIS`, `SUBIS` y `B.cond`.
 
 Se agregaron nuevos módulos:
 - `bCondCheck.sv`: Se creó este módulo para evaluar las condiciones de salto condicional usando las banderas de estado del procesador. Permite determinar si una instrucción condicional debe ejecutarse o no.
-- `flopenr.sv`: Este módulo implementa un registro con habilitación (en), usado para almacenar las banderas de estado (Z, N, V, C) y actualizar su valor solo cuando sea necesario.
+- `flag_register.sv`: Este módulo almacena las banderas solo si `write_enable` está activo.
 
 Se modificó el testbench:
 - `processor_tb.sv`: Se agregaron nuevas señales (`PCSrc`, `condBranch`, `instr`, `IM_addr`) para evaluar el comportamiento del procesador con instrucciones condicionales.
@@ -148,6 +148,9 @@ Diagrama del microprocesador:
 
 **DATAPATH:**  
 ![datapath](/assets/datapath.png "datapath")
+
+**MEMORY:**  
+![memory](/assets/memory.png "memory")
 
 
 El programa que se usó para testear las nuevas instrucciones es el siguiente:

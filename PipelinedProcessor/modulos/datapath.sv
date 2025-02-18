@@ -14,12 +14,12 @@ module datapath #(parameter N = 64)
 					input logic [31:0] IM_readData,
 					input logic [N-1:0] DM_readData,
 					output logic [N-1:0] IM_addr, DM_addr, DM_writeData, PCBranch_E,
-					output logic DM_writeEnable, DM_readEnable, PCSrc, write_flags_E );					
+					output logic DM_writeEnable, DM_readEnable, PCSrc );					
 					
 	logic [N-1:0] aluResult_E, writeData_E, writeData3; 
 	logic [N-1:0] signImm_D, readData1_D, readData2_D;
 	logic zero_E;
-	logic n_E, v_E, c_E;
+	logic n_E, v_E, c_E, write_flags_E;
 	logic [95:0] qIF_ID;
 	logic [271:0] qID_EX;
 	logic [207:0] qEX_MEM;
