@@ -45,7 +45,7 @@ module processor_arm #(parameter N = 64)
 									.DM_writeEnable(DM_writeEnable), 
 									.DM_readEnable(DM_readEnable),
 									.PCSrc(PCSrc),
-									.write_flags(write_flags),
+									.write_flags_E(write_flags),
 									.PCBranch_E(PCBranch_E));				
 					
 					

@@ -4,7 +4,7 @@ module maindec(
 	output logic [1:0] ALUOp
 );
 	always_comb begin
-		case (Op)
+		casez (Op)
 			// LDUR
 			11'b111_1100_0010: begin
 				Reg2Loc = 0;

@@ -1,9 +1,9 @@
-module alu(
+module alu #(parameter N = 64) (
     input  logic [63:0] a, b,
     input  logic [3:0] ALUControl,
     output logic [63:0] result,
     output logic        zero,
-    output logic        Z, N, V, C,
+    output logic        Ne, V, C,
     output logic        write_flags
 );
 
@@ -29,8 +29,7 @@ module alu(
 
     always_comb begin
         zero = (result == 0);
-        Z = zero;
-        N = result[63];
+        Ne = result[63];
         
         if (ALUControl == 4'b0010 || ALUControl == 4'b1010) begin
             V = (~(a[63] ^ b[63]) && (result[63] ^ a[63]));

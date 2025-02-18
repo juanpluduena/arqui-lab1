@@ -6,7 +6,7 @@ module signext(
 	assign opcode = a[31:21];
 	
 	always_comb
-		case (opcode)
+		casez (opcode)
 			// LDUR
 			11'b111_1100_0010: y = {{55{a[20]}}, a[20:12]};
 			// STUR

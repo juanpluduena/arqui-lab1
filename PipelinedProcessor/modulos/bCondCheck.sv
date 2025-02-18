@@ -1,29 +1,26 @@
 module bCondCheck (
-    input logic z, n, v, c, condBranch,
-    input logic [4:0] qIF_ID,
+    input logic [3:0] sel,
+    input logic [3:0] flags,
     output logic cBranch
 );
+
     always_comb begin
-        if (condBranch) begin
-            case (qIF_ID)
-                5'b00000: cBranch = (z == 1);                // EQ
-                5'b00001: cBranch = (z == 0);                // NE
-                5'b00010: cBranch = (c == 1);                // HS
-                5'b00011: cBranch = (c == 0);                // LO
-                5'b00100: cBranch = (n == 1);                // MI
-                5'b00101: cBranch = (n == 0);                // PL
-                5'b00110: cBranch = (v == 1);                // VS
-                5'b00111: cBranch = (v == 0);                // VC
-                5'b01000: cBranch = (z == 0) && (c == 1);    // HI
-                5'b01001: cBranch = (z == 1) || (c == 0);    // LS
-                5'b01010: cBranch = (n == v);                // GE
-                5'b01011: cBranch = (n != v);                // LT
-                5'b01100: cBranch = (z == 0) && (n == v);    // GT
-                5'b01101: cBranch = (z == 1) || (n != v);    // LE
-                default: cBranch = 0;
-            endcase
-        end else begin
-            cBranch = 0;
-        end
+        case (sel)
+            4'b0000: cBranch = (flags[3] == 1);                				// EQ
+            4'b0001: cBranch = (flags[3] == 0);                				// NE
+            4'b0010: cBranch = (flags[1] == 1);                				// HS
+            4'b0011: cBranch = (flags[1] == 0);                				// LO
+            4'b0100: cBranch = (flags[2] == 1);                				// MI
+            4'b0101: cBranch = (flags[2] == 0);                				// PL
+            4'b0110: cBranch = (flags[0] == 1);                				// VS
+            4'b0111: cBranch = (flags[0] == 0);                				// VC
+            4'b1000: cBranch = (flags[3] == 0) && (flags[1] == 1);    		// HI
+            4'b1001: cBranch = (flags[3] == 1) || (flags[1] == 0);    		// LS
+            4'b1010: cBranch = (flags[2] == flags[0]);                		// GE
+            4'b1011: cBranch = (flags[2] != flags[0]);                		// LT
+            4'b1100: cBranch = (flags[3] == 0) && (flags[2] == flags[0]); 	// GT
+            4'b1101: cBranch = (flags[3] == 1) || (flags[2] != flags[0]); 	// LE
+            default: cBranch = 0;
+        endcase
     end
 endmodule
