@@ -49,7 +49,7 @@ module processor_arm #(parameter N = 64)
 									.PCBranch_E(PCBranch_E));				
 					
 					
-	imem 				instrMem (.addr(IM_address[8:2]),
+	imem 				instrMem (.addr(IM_address[9:2]),
 									.q(q));
 									
 	

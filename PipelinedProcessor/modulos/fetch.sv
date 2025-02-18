@@ -16,14 +16,14 @@ module fetch #(parameter N = 64) (
 	  .clk(clk),
 	  .reset(reset),
 	  .d(mux_result),
-	  .q(flop_result)
+	  .q(imem_addr_F)
     );
 	 
 	 adder adder_inst (
-		.a(flop_result),
+		.a(imem_addr_F),
 		.b(64'h4),
 		.y(adder_result)
 	 );
 	 
-	 assign imem_addr_F = flop_result;
+	 //assign imem_addr_F = flop_result;
 endmodule
