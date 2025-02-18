@@ -31,10 +31,10 @@ module alu #(parameter N = 64) (
         zero = (result == 0);
         Ne = result[63];
         
-        if (ALUControl == 4'b0010 || ALUControl == 4'b1010) begin
+        if (ALUControl == 4'b1010) begin
             V = (~(a[63] ^ b[63]) && (result[63] ^ a[63]));
             C = (result < a);
-        end else if (ALUControl == 4'b0110 || ALUControl == 4'b1110) begin
+        end else if (ALUControl == 4'b1110) begin
             V = ((a[63] ^ b[63]) && (result[63] ^ a[63]));
             C = (a >= b);
         end else begin

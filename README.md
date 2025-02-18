@@ -5,7 +5,7 @@ Laboratorio 1 de Arquitectura del Computador 2024
 
 Las modificaciones que se realizaron fueron en los modulos:
 - `aludec.sv`: Se agregaron las condiciones para redireccionar alucontrol dependiendo del opcode ADDI o SUBI.
-- ` maindec.sv`: Se agregaron los opcode correspondientes a ADDI y SUBI según LEGv8 Green Card.
+- `maindec.sv`: Se agregaron los opcode correspondientes a ADDI y SUBI según LEGv8 Green Card.
 - `signext.sv`: Se agregó extensión de signo para el valor inmediato que toman las instrucciones ADDI y SUBI.
 
 No hubo necesidad de agregar señales ni módulos además de los ya existentes.

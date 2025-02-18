@@ -50,10 +50,10 @@ ADD XZR, XZR, XZR
 ADD XZR, XZR, XZR
 
 // Prueba de Branch condicional
-ADDIS X12, XZR, #0  // X12 = 0
+SUBS X12, X1, X1
 ADD XZR, XZR, XZR
 ADD XZR, XZR, XZR
-B.EQ salto          // Salta porque X12 es 0
+B.EQ salto
 
 ADD XZR, XZR, XZR
 ADD XZR, XZR, XZR
